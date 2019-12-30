@@ -1,0 +1,19 @@
+.CardView {
+  border-color: black;
+  border-width: 0.125em;
+  border-style: solid;
+  width: 8em;
+  height: 8em;
+}
+
+h1 {
+  font-size: 1em;
+}
+
+.SuitBlack {
+  color: black;
+}
+
+.SuitRed {
+  color: red;
+}
