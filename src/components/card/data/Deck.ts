@@ -5,8 +5,12 @@ import { rankArray, Rank } from "./Rank";
 export class Deck {
   private _cards: Card[];
 
-  constructor() {
+  constructor(isDeckMade?: boolean) {
     this._cards = [];
+    if (isDeckMade) {
+      this.createDeck();
+      this.shuffleDeck();
+    }
   }
 
   get size(): number {
@@ -30,23 +34,15 @@ export class Deck {
     }
   }
 
-  private checkIndex(cardIndex: number) {
-    if (cardIndex < 0 || cardIndex >= this.size) {
-      throw new Error(`ERROR: Cannot remove card with invalid index of ${cardIndex}`);
-    }
-  }
-
   public addCard(newCard: Card): void {
     this._cards.push(newCard);
   }
 
   public removeCard(cardIndex: number): void {
-    this.checkIndex(cardIndex);
     this._cards.splice(cardIndex, 1);
   }
 
   public getCard(cardIndex: number): Card {
-    this.checkIndex(cardIndex);
     return this._cards[cardIndex];
   }
 

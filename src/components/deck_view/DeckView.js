@@ -26,7 +26,11 @@ var DeckView = /** @class */ (function (_super) {
         return _this;
     }
     DeckView.prototype.render = function () {
-        var topCard = this._deck.getCard(0);
+        var topCard = this._deck.getCard(this._deck.size - 1);
+        if (topCard == null || topCard == undefined) {
+            return (react_1.default.createElement("div", { className: "DeckView" },
+                react_1.default.createElement("h1", null, "THE DECK IS EMPTY.")));
+        }
         return (react_1.default.createElement("div", { className: "DeckView" },
             react_1.default.createElement(CardView_1.CardView, { rank: topCard.rank, suit: topCard.suit, deckName: this.props.name })));
     };

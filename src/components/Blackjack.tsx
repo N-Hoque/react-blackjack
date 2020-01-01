@@ -86,9 +86,9 @@ export class Blackjack extends React.Component<{}, BJState> {
   constructor(props: {}) {
     super(props);
 
+    this.startGame = this.startGame.bind(this);
     this.standPlayer = this.standPlayer.bind(this);
     this.hitPlayer = this.hitPlayer.bind(this);
-    this.startGame = this.startGame.bind(this);
 
     this.state = {
       deckState: {
@@ -107,14 +107,13 @@ export class Blackjack extends React.Component<{}, BJState> {
 
     this.setState({
       deckState: {
+        drawPile: new Deck(true),
         dealerDeck: new Deck(),
-        drawPile: new Deck(),
         playerDeck: new Deck(),
       },
     });
 
-    this.state.deckState.drawPile.createDeck();
-    this.state.deckState.drawPile.shuffleDeck();
+    console.log("DECKS CREATED!");
   }
 
   private drawCardPlayer(): void {
@@ -126,8 +125,7 @@ export class Blackjack extends React.Component<{}, BJState> {
   }
 
   public startGame(): void {
-    console.log("RESTARTING GAME.");
-
+    console.log("STARTING GAME.");
     this.setState({
       hasGameStarted: true,
       hasGameEnded: false,
@@ -143,10 +141,11 @@ export class Blackjack extends React.Component<{}, BJState> {
     // Draw 2 cards for dealer.
     this.drawCardDealer();
     this.drawCardDealer();
+    console.log("STARTING GAME.");
   }
 
   public hitPlayer(): void {
-    this.state.deckState.playerDeck.drawCardFromDeck(this.state.deckState.drawPile);
+    this.drawCardPlayer();
 
     const playerDeckValue = this.state.deckState.playerDeck.getDeckValue();
 

@@ -18,8 +18,15 @@ export class DeckView extends React.Component<DeckProps> {
   }
 
   render() {
-    const topCard = this._deck.getCard(0);
+    const topCard = this._deck.getCard(this._deck.size - 1);
 
+    if (topCard == null || topCard == undefined) {
+      return (
+        <div className="DeckView">
+          <h1>THE DECK IS EMPTY.</h1>
+        </div>
+      );
+    }
     return (
       <div className="DeckView">
         <CardView rank={topCard.rank} suit={topCard.suit} deckName={this.props.name} />

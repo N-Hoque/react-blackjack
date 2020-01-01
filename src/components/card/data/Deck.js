@@ -4,8 +4,12 @@ var Card_1 = require("./Card");
 var Suit_1 = require("./Suit");
 var Rank_1 = require("./Rank");
 var Deck = /** @class */ (function () {
-    function Deck() {
+    function Deck(isDeckMade) {
         this._cards = [];
+        if (isDeckMade) {
+            this.createDeck();
+            this.shuffleDeck();
+        }
     }
     Object.defineProperty(Deck.prototype, "size", {
         get: function () {
@@ -31,20 +35,13 @@ var Deck = /** @class */ (function () {
             this._cards[randIndex] = temp;
         }
     };
-    Deck.prototype.checkIndex = function (cardIndex) {
-        if (cardIndex < 0 || cardIndex >= this.size) {
-            throw new Error("ERROR: Cannot remove card with invalid index of " + cardIndex);
-        }
-    };
     Deck.prototype.addCard = function (newCard) {
         this._cards.push(newCard);
     };
     Deck.prototype.removeCard = function (cardIndex) {
-        this.checkIndex(cardIndex);
         this._cards.splice(cardIndex, 1);
     };
     Deck.prototype.getCard = function (cardIndex) {
-        this.checkIndex(cardIndex);
         return this._cards[cardIndex];
     };
     Deck.prototype.getDeckAsCardArray = function () {
