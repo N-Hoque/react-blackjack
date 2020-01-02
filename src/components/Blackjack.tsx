@@ -39,15 +39,14 @@ function Welcome(props: object): JSX.Element {
 function Decks(props: BJDeckState & { hasGameStarted: boolean }): JSX.Element {
   if (!props.hasGameStarted) {
     return <div className="Decks"></div>;
-  } else {
-    return (
-      <div className="Decks">
-        <PlayerDeckView name="Player" playerDeck={props.playerDeck} drawPile={props.drawPile} />
-        <DeckView name="Draw Pile" deck={props.drawPile} />
-        <PlayerDeckView name="Dealer" playerDeck={props.dealerDeck} drawPile={props.drawPile} />
-      </div>
-    );
   }
+  return (
+    <div className="Decks">
+      <PlayerDeckView name="Player" playerDeck={props.playerDeck} />
+      <DeckView name="Draw Pile" deck={props.drawPile} />
+      <PlayerDeckView name="Dealer" playerDeck={props.dealerDeck} />
+    </div>
+  );
 }
 
 function Actions(props: PropsActions): JSX.Element {
@@ -102,37 +101,29 @@ export class Blackjack extends React.Component<{}, BJState> {
     };
   }
 
-  private initialiseDeck(): void {
-    console.log("INITIALISING DECKS.");
+  private drawCardPlayer(): void {
+    this.state.deckState.playerDeck.drawCardFromDeck(this.state.deckState.drawPile);
+    this.setState({ deckState: this.state.deckState });
+  }
+
+  private drawCardDealer(): void {
+    this.state.deckState.dealerDeck.drawCardFromDeck(this.state.deckState.drawPile);
+    this.setState({ deckState: this.state.deckState });
+  }
+
+  public startGame(): void {
+    console.log("STARTING GAME.");
 
     this.setState({
+      hasGameStarted: true,
+      hasGameEnded: false,
+      gameEndMessage: "",
       deckState: {
         drawPile: new Deck(true),
         dealerDeck: new Deck(),
         playerDeck: new Deck(),
       },
     });
-
-    console.log("DECKS CREATED!");
-  }
-
-  private drawCardPlayer(): void {
-    this.state.deckState.playerDeck.drawCardFromDeck(this.state.deckState.drawPile);
-  }
-
-  private drawCardDealer(): void {
-    this.state.deckState.dealerDeck.drawCardFromDeck(this.state.deckState.drawPile);
-  }
-
-  public startGame(): void {
-    console.log("STARTING GAME.");
-    this.setState({
-      hasGameStarted: true,
-      hasGameEnded: false,
-      gameEndMessage: "",
-    });
-
-    this.initialiseDeck();
 
     // Draw 2 cards for player.
     this.drawCardPlayer();
@@ -141,16 +132,20 @@ export class Blackjack extends React.Component<{}, BJState> {
     // Draw 2 cards for dealer.
     this.drawCardDealer();
     this.drawCardDealer();
+
     console.log("STARTING GAME.");
   }
 
   public hitPlayer(): void {
+    console.log("HIT");
+
     this.drawCardPlayer();
 
     const playerDeckValue = this.state.deckState.playerDeck.getDeckValue();
 
     if (playerDeckValue > 21) {
       this.setState({
+        hasGameStarted: false,
         hasGameEnded: true,
         gameEndMessage: "Player has bust! Game Over.",
       });
@@ -185,7 +180,6 @@ export class Blackjack extends React.Component<{}, BJState> {
     return (
       <div>
         <Welcome />
-
         <Decks
           drawPile={this.state.deckState.drawPile}
           playerDeck={this.state.deckState.playerDeck}

@@ -28,12 +28,10 @@ function Decks(props) {
     if (!props.hasGameStarted) {
         return react_1.default.createElement("div", { className: "Decks" });
     }
-    else {
-        return (react_1.default.createElement("div", { className: "Decks" },
-            react_1.default.createElement(PlayerDeckView_1.PlayerDeckView, { name: "Player", playerDeck: props.playerDeck, drawPile: props.drawPile }),
-            react_1.default.createElement(DeckView_1.DeckView, { name: "Draw Pile", deck: props.drawPile }),
-            react_1.default.createElement(PlayerDeckView_1.PlayerDeckView, { name: "Dealer", playerDeck: props.dealerDeck, drawPile: props.drawPile })));
-    }
+    return (react_1.default.createElement("div", { className: "Decks" },
+        react_1.default.createElement(PlayerDeckView_1.PlayerDeckView, { name: "Player", playerDeck: props.playerDeck }),
+        react_1.default.createElement(DeckView_1.DeckView, { name: "Draw Pile", deck: props.drawPile }),
+        react_1.default.createElement(PlayerDeckView_1.PlayerDeckView, { name: "Dealer", playerDeck: props.dealerDeck })));
 }
 function Actions(props) {
     if (props.hasGameEnded) {
@@ -77,22 +75,13 @@ var Blackjack = /** @class */ (function (_super) {
         };
         return _this;
     }
-    Blackjack.prototype.initialiseDeck = function () {
-        console.log("INITIALISING DECKS.");
-        this.setState({
-            deckState: {
-                drawPile: new Deck_1.Deck(true),
-                dealerDeck: new Deck_1.Deck(),
-                playerDeck: new Deck_1.Deck(),
-            },
-        });
-        console.log("DECKS CREATED!");
-    };
     Blackjack.prototype.drawCardPlayer = function () {
         this.state.deckState.playerDeck.drawCardFromDeck(this.state.deckState.drawPile);
+        this.setState({ deckState: this.state.deckState });
     };
     Blackjack.prototype.drawCardDealer = function () {
         this.state.deckState.dealerDeck.drawCardFromDeck(this.state.deckState.drawPile);
+        this.setState({ deckState: this.state.deckState });
     };
     Blackjack.prototype.startGame = function () {
         console.log("STARTING GAME.");
@@ -100,8 +89,12 @@ var Blackjack = /** @class */ (function (_super) {
             hasGameStarted: true,
             hasGameEnded: false,
             gameEndMessage: "",
+            deckState: {
+                drawPile: new Deck_1.Deck(true),
+                dealerDeck: new Deck_1.Deck(),
+                playerDeck: new Deck_1.Deck(),
+            },
         });
-        this.initialiseDeck();
         // Draw 2 cards for player.
         this.drawCardPlayer();
         this.drawCardPlayer();
@@ -111,10 +104,12 @@ var Blackjack = /** @class */ (function (_super) {
         console.log("STARTING GAME.");
     };
     Blackjack.prototype.hitPlayer = function () {
+        console.log("HIT");
         this.drawCardPlayer();
         var playerDeckValue = this.state.deckState.playerDeck.getDeckValue();
         if (playerDeckValue > 21) {
             this.setState({
+                hasGameStarted: false,
                 hasGameEnded: true,
                 gameEndMessage: "Player has bust! Game Over.",
             });

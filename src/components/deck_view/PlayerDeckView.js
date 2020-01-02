@@ -23,18 +23,16 @@ var PlayerDeckView = /** @class */ (function (_super) {
     function PlayerDeckView(props) {
         var _this = _super.call(this, props) || this;
         _this._playerDeck = _this.props.playerDeck;
-        _this._drawingDeck = _this.props.drawPile;
         return _this;
     }
     PlayerDeckView.prototype.addToDeck = function (newCard) {
         this._playerDeck.addCard(newCard);
     };
     PlayerDeckView.prototype.render = function () {
-        var cardViews = [];
-        for (var i = 0; i < this._playerDeck.size; i++) {
-            var card = this._playerDeck.getCard(i);
-            cardViews.push(react_1.default.createElement(CardView_1.CardView, { rank: card.rank, suit: card.suit, deckName: this.props.name }));
-        }
+        var _this = this;
+        var cardViews = this._playerDeck
+            .getDeckAsCardArray()
+            .map(function (card) { return react_1.default.createElement(CardView_1.CardView, { rank: card.rank, suit: card.suit, deckName: _this.props.name }); });
         return react_1.default.createElement("div", { className: "PlayerDeckView" }, cardViews);
     };
     return PlayerDeckView;
