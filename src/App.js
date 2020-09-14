@@ -1,12 +1,13 @@
 import React from "react";
+
 import "./App.css";
 
-import { Blackjack } from "./components/Blackjack";
+import { CardView } from "./components/CardView/CardView";
 
 function App() {
   return (
     <div className="App">
-      <Blackjack />
+      <CardView rank={"ACE"} suit={"SPADES"} />
     </div>
   );
 }
